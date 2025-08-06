@@ -1,0 +1,136 @@
+<!-- templates/articles.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Title}} - Сайт-визитка</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- Анимированный фон -->
+<div class="background-animation">
+    <div class="floating-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+</div>
+
+<!-- Навигация -->
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="/" class="nav-logo">🚀 Портфолио</a>
+        <div class="nav-menu">
+            <a href="/" class="nav-link">Главная</a>
+            <a href="/resume" class="nav-link">Резюме</a>
+            <a href="/notes" class="nav-link">Заметки</a>
+            <a href="/articles" class="nav-link">Статьи</a>
+            <a href="/hobby" class="nav-link">Хобби</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Основной контент -->
+<main class="main-content">
+    <div class="container">
+        <div class="articles-wrapper">
+            <div class="articles-header">
+                <div class="breadcrumb">
+                    <a href="/">Главная</a>
+                    <span class="breadcrumb-separator">→</span>
+                    <span class="breadcrumb-current">{{.Title}}</span>
+                </div>
+                <h1 class="articles-title">{{.Title}}</h1>
+                <p class="articles-subtitle">
+                    {{if eq .Title "Заметки"}}
+                    Короткие мысли и наблюдения из мира технологий
+                    {{else}}
+                    Подробные материалы и руководства по разработке
+                    {{end}}
+                </p>
+                <div class="articles-stats">
+                    <span class="articles-count">{{len .Articles}} {{if eq (len .Articles) 1}}публикация{{else if and (gt (len .Articles) 1) (lt (len .Articles) 5)}}публикации{{else}}публикаций{{end}}</span>
+                </div>
+            </div>
+
+            {{if .Articles}}
+            <div class="articles-grid">
+                {{range $index, $article := .Articles}}
+                <article class="article-card">
+                    <div class="article-card-header">
+                        <div class="article-meta">
+                            <time class="article-date" datetime="{{$article.Date.Format "2006-01-02"}}">
+                            {{$article.DateStr}}
+                            </time>
+                            <div class="article-category">
+                                {{if eq $.Title "Заметки"}}
+                                <span class="category-badge category-note">Заметка</span>
+                                {{else}}
+                                <span class="category-badge category-article">Статья</span>
+                                {{end}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="article-card-body">
+                        <h2 class="article-title">
+                            <a href="/{{if eq $.Title "Заметки"}}notes{{else}}articles{{end}}/{{$article.URL}}">
+                            {{$article.Title}}
+                            </a>
+                        </h2>
+                        <div class="article-preview">
+                            <div class="article-excerpt">
+                                {{$article.Content}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="article-card-footer">
+                        <a href="/{{if eq $.Title "Заметки"}}notes{{else}}articles{{end}}/{{$article.URL}}" class="read-more">
+                        <span>Читать полностью</span>
+                        <span class="read-more-icon">→</span>
+                        </a>
+                    </div>
+                </article>
+                {{end}}
+            </div>
+            {{else}}
+            <div class="empty-state">
+                <div class="empty-icon">📝</div>
+                <h3 class="empty-title">Пока здесь пусто</h3>
+                <p class="empty-description">
+                    {{if eq .Title "Заметки"}}
+                    Здесь пока пусто =(
+                    {{else}}
+                    Здесь пока пусто =(
+                    {{end}}
+                </p>
+                <a href="/" class="btn btn-primary">На главную</a>
+            </div>
+            {{end}}
+        </div>
+    </div>
+</main>
+
+<!-- Футер -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <p>&copy; 2025 Сайт-визитка. Создано с ❤️ на Go</p>
+            <div class="footer-links">
+                <a href="mailto:0xcffaedfe@gmail.com">Email</a>
+                <a href="https://github.com/pixfid" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="/static/js/animations.js"></script>
+</body>
+</html>

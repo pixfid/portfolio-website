@@ -1,0 +1,88 @@
+<!-- templates/page.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Title}} - Сайт-визитка</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- Анимированный фон -->
+<div class="background-animation">
+    <div class="floating-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+</div>
+
+<!-- Навигация -->
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="/" class="nav-logo">🚀 Портфолио</a>
+        <div class="nav-menu">
+            <a href="/" class="nav-link">Главная</a>
+            <a href="/resume" class="nav-link">Резюме</a>
+            <a href="/notes" class="nav-link">Заметки</a>
+            <a href="/articles" class="nav-link">Статьи</a>
+            <a href="/hobby" class="nav-link">Хобби</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Основной контент -->
+<main class="main-content">
+    <div class="container">
+        <div class="page-wrapper">
+            <div class="page-header">
+                <div class="breadcrumb">
+                    <a href="/">Главная</a>
+                    <span class="breadcrumb-separator">→</span>
+                    <span class="breadcrumb-current">{{.Title}}</span>
+                </div>
+                <h1 class="page-title">{{.Title}}</h1>
+                <div class="page-decoration">
+                    <div class="decoration-line"></div>
+                </div>
+            </div>
+
+            <div class="page-content">
+                <article class="content-article">
+                    <div class="article-body">
+                        {{.Content}}
+                    </div>
+                </article>
+            </div>
+
+            <div class="page-actions">
+                <a href="javascript:history.back()" class="btn btn-secondary">
+                    <i class="btn-icon">←</i>
+                    <span>Назад</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Футер -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <p>&copy; 2025 Сайт-визитка. Создано с ❤️ на Go</p>
+            <div class="footer-links">
+                <a href="mailto:0xcffaedfe@gmail.com">Email</a>
+                <a href="https://github.com/pixfid" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="/static/js/animations.js"></script>
+</body>
+</html>

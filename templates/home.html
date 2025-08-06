@@ -1,0 +1,131 @@
+<!-- templates/home.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Title}} - Сайт-визитка</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- Анимированный фон -->
+<div class="background-animation">
+    <div class="floating-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+</div>
+
+<!-- Навигация -->
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="/" class="nav-logo">🚀 Портфолио</a>
+        <div class="nav-menu">
+            <a href="/" class="nav-link">Главная</a>
+            <a href="/resume" class="nav-link">Резюме</a>
+            <a href="/notes" class="nav-link">Заметки</a>
+            <a href="/articles" class="nav-link">Статьи</a>
+            <a href="/hobby" class="nav-link">Хобби</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Основной контент -->
+<main class="main-content">
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-content">
+                <div class="hero-avatar">
+                    <div class="avatar-circle">
+                        <img src="/static/images/avatar.jpg" alt="Аватар" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="avatar-placeholder" style="display:none;">
+                            <span>👨‍💻</span>
+                        </div>
+                    </div>
+                </div>
+                <h1 class="hero-title">Привет, я Саня!</h1>
+                <p class="hero-subtitle">Создаю, изучаю и делюсь опытом</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">9+</span>
+                        <span class="stat-label">лет опыта</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">5+</span>
+                        <span class="stat-label">проектов</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">∞</span>
+                        <span class="stat-label">кофе выпито</span>
+                    </div>
+                </div>
+                <div class="hero-buttons">
+                    <a href="/resume" class="btn btn-primary">
+                        <span>Посмотреть резюме</span>
+                        <i class="btn-icon">📄</i>
+                    </a>
+                    <a href="/articles" class="btn btn-secondary">
+                        <span>Читать статьи</span>
+                        <i class="btn-icon">📚</i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <section class="features-section">
+            <h2 class="section-title">Что вы найдете на сайте</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📄</div>
+                    <h3>Резюме</h3>
+                    <p>Мой профессиональный опыт, навыки и достижения</p>
+                    <a href="/resume" class="feature-link">Подробнее →</a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📝</div>
+                    <h3>Заметки</h3>
+                    <p>Короткие мысли, идеи и наблюдения из мира технологий</p>
+                    <a href="/notes" class="feature-link">Читать →</a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3>Статьи</h3>
+                    <p>Подробные материалы и туториалы по программированию и архитектуре</p>
+                    <a href="/articles" class="feature-link">Изучать →</a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Хобби</h3>
+                    <p>Мои увлечения и интересы вне работы</p>
+                    <a href="/hobby" class="feature-link">Узнать →</a>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<!-- Футер -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <p>&copy; 2025 Сайт-визитка. Создано с ❤️ на Go</p>
+            <div class="footer-links">
+                <a href="mailto:0xcffaedfe@gmail.com">Email</a>
+                <a href="https://github.com/pixfid" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="/static/js/animations.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  portfolio:
+    build: .
+    container_name: portfolio-website
+    ports:
+      - "8080:8080"
+    volumes:
+      # Монтирование директории контента для возможности редактирования
+      - /volume1/docker/portfolio-website/content:/app/content:rw
+      # Монтирование статических файлов (опционально, для разработки)
+      - /volume1/docker/portfolio-website/static:/app/static:ro
+    environment:
+      - TZ=Europe/Moscow
+      - GIN_MODE=release
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portfolio.rule=Host(`xclab.ru`)"
+      - "traefik.http.routers.portfolio.tls=true"
+      - "traefik.http.routers.portfolio.tls.certresolver=letsencrypt"
