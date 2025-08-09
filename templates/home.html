@@ -9,18 +9,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
 </head>
 <body>
-<!-- Анимированный фон -->
-<div class="background-animation">
-    <div class="floating-particles">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-    </div>
-</div>
+<!-- Particles.js фон -->
+<div id="particles-js"></div>
 
 <!-- Навигация -->
 <nav class="navbar">
@@ -43,7 +36,7 @@
             <div class="hero-content">
                 <div class="hero-avatar">
                     <div class="avatar-circle">
-                        <img src="/static/images/avatar.jpg" alt="Аватар" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <img src="/static/images/avatar.png" alt="Аватар" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="avatar-placeholder" style="display:none;">
                             <span>👨‍💻</span>
                         </div>
@@ -126,6 +119,9 @@
     </div>
 </footer>
 
+<!-- Particles.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+<script src="/static/js/particles.js"></script>
 <script src="/static/js/animations.js"></script>
 </body>
 </html>
