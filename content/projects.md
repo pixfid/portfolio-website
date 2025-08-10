@@ -1,3 +1,9 @@
+### [portfolio-website](https://github.com/pixfid/portfolio-website)
+
+Простой шаблон сайта-портфолио / домашней страницы с минимальным бэком на Go: HTML-шаблоны, статические файлы и контент из каталога content.
+
+---
+
 ### [Video Validator](https://github.com/pixfid/video_validator)
 
 Bash скрипт для проверки валидности видео файлов с помощью ffmpeg.
