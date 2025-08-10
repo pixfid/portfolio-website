@@ -503,7 +503,7 @@ body {
     font-size: 3rem;
     margin-bottom: 1rem;
     animation: bounce 2s ease-in-out infinite;
-    filter: grayscale(100%);
+    filter: grayscale(0%);
 }
 
 @keyframes bounce {

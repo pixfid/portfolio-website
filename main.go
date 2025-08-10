@@ -169,6 +169,12 @@ func parseTemplate(filename string) (*template.Template, error) {
 
 // Главная страница
 func homeHandler(w http.ResponseWriter, r *http.Request) {
+
+	if r.URL.Path != "/" {
+		notFoundHandler(w, r)
+		return
+	}
+
 	tmpl, err := parseTemplate("templates/home.html")
 	if err != nil {
 		log.Printf("Ошибка загрузки шаблона home.html: %v", err)
@@ -190,6 +196,7 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 
 // Страница резюме
 func resumeHandler(w http.ResponseWriter, r *http.Request) {
+
 	tmpl, err := parseTemplate("templates/page.html")
 	if err != nil {
 		log.Printf("Ошибка загрузки шаблона page.html: %v", err)
@@ -221,6 +228,7 @@ func resumeHandler(w http.ResponseWriter, r *http.Request) {
 
 // Страница хобби
 func hobbyHandler(w http.ResponseWriter, r *http.Request) {
+
 	tmpl, err := parseTemplate("templates/page.html")
 	if err != nil {
 		log.Printf("Ошибка загрузки шаблона page.html: %v", err)
@@ -250,8 +258,41 @@ func hobbyHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Страница проекты
+func projectsHandler(w http.ResponseWriter, r *http.Request) {
+
+	tmpl, err := parseTemplate("templates/page.html")
+	if err != nil {
+		log.Printf("Ошибка загрузки шаблона page.html: %v", err)
+		http.Error(w, "Ошибка загрузки шаблона", http.StatusInternalServerError)
+		return
+	}
+
+	content, err := ioutil.ReadFile("content/projects.md")
+	var htmlContent template.HTML
+
+	if err != nil {
+		htmlContent = template.HTML("<p>Информация о проектах не найдена. Создайте файл content/projects.md</p>")
+	} else {
+		htmlContent = parseMarkdown(content)
+	}
+
+	data := PageData{
+		Title:      "Мои Проекты",
+		Content:    htmlContent,
+		CurrentURL: r.URL.String(),
+	}
+
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	if err := tmpl.Execute(w, data); err != nil {
+		log.Printf("Ошибка рендеринга шаблона page.html: %v", err)
+		http.Error(w, "Внутренняя ошибка сервера", http.StatusInternalServerError)
+	}
+}
+
 // Страница списка заметок
 func notesHandler(w http.ResponseWriter, r *http.Request) {
+
 	tmpl, err := parseTemplate("templates/articles.html")
 	if err != nil {
 		log.Printf("Ошибка загрузки шаблона articles.html: %v", err)
@@ -281,6 +322,7 @@ func notesHandler(w http.ResponseWriter, r *http.Request) {
 
 // Страница отдельной заметки
 func noteHandler(w http.ResponseWriter, r *http.Request) {
+
 	tmpl, err := parseTemplate("templates/article.html")
 	if err != nil {
 		log.Printf("Ошибка загрузки шаблона article.html: %v", err)
@@ -330,6 +372,7 @@ func noteHandler(w http.ResponseWriter, r *http.Request) {
 
 // Страница списка статей
 func articlesHandler(w http.ResponseWriter, r *http.Request) {
+
 	tmpl, err := parseTemplate("templates/articles.html")
 	if err != nil {
 		log.Printf("Ошибка загрузки шаблона articles.html: %v", err)
@@ -359,6 +402,7 @@ func articlesHandler(w http.ResponseWriter, r *http.Request) {
 
 // Страница отдельной статьи
 func articleHandler(w http.ResponseWriter, r *http.Request) {
+
 	tmpl, err := parseTemplate("templates/article.html")
 	if err != nil {
 		log.Printf("Ошибка загрузки шаблона article.html: %v", err)
@@ -406,13 +450,126 @@ func articleHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// Middleware для логирования
-func loggingMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		start := time.Now()
-		next.ServeHTTP(w, r)
-		log.Printf("%s %s %v", r.Method, r.URL.Path, time.Since(start))
-	})
+// robotsHandler обработчик для robots.txt
+func robotsHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/plain")
+	fmt.Fprintf(w, `User-agent: *
+Allow: /
+
+Sitemap: http://%s/sitemap.xml`, r.Host)
+}
+
+// sitemapHandler обработчик для sitemap.xml
+func sitemapHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/xml")
+
+	sitemap := `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>http://%s/</loc>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    <url>
+        <loc>http://%s/resume</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>http://%s/articles</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>http://%s/notes</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>http://%s/hobby</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>http://%s/hobby</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+</urlset>`
+
+	fmt.Fprintf(w, sitemap, r.Host, r.Host, r.Host, r.Host, r.Host)
+}
+
+// notFoundHandler обработчик для 404 страниц
+func notFoundHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotFound)
+
+	// Проверяем, не пытается ли кто-то получить доступ к служебным файлам
+	suspiciousExtensions := []string{".php", ".asp", ".jsp", ".cgi", ".pl", ".py", ".rb", ".sh"}
+	for _, ext := range suspiciousExtensions {
+		if strings.HasSuffix(r.URL.Path, ext) {
+			// Дополнительное логирование подозрительных запросов
+			log.Printf("[SECURITY WARNING] Attempt to access script file: %s from %s", r.URL.Path, r.RemoteAddr)
+			break
+		}
+	}
+
+	// Можно создать красивую 404 страницу
+	tmpl := `
+    <!DOCTYPE html>
+    <html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>404 - Страница не найдена</title>
+        <style>
+            body {
+                background: #000;
+                color: #fff;
+                font-family: 'Inter', sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+            }
+            .error-container {
+                text-align: center;
+            }
+            h1 {
+                font-size: 6rem;
+                margin: 0;
+                opacity: 0.8;
+            }
+            p {
+                font-size: 1.2rem;
+                opacity: 0.6;
+            }
+            a {
+                color: #fff;
+                text-decoration: none;
+                border: 1px solid #fff;
+                padding: 10px 20px;
+                display: inline-block;
+                margin-top: 20px;
+                transition: all 0.3s;
+            }
+            a:hover {
+                background: #fff;
+                color: #000;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="error-container">
+            <h1>404</h1>
+            <p>Страница не найдена</p>
+            <p>Запрошенный путь: <code>%s</code></p>
+            <a href="/">Вернуться на главную</a>
+        </div>
+    </body>
+    </html>
+    `
+	fmt.Fprintf(w, tmpl, r.URL.Path)
 }
 
 // Создание необходимых директорий
@@ -435,6 +592,15 @@ func createDirectories() error {
 	return nil
 }
 
+// Middleware для логирования
+func loggingMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		start := time.Now()
+		next.ServeHTTP(w, r)
+		log.Printf("%s %s %v", r.Method, r.URL.Path, time.Since(start))
+	})
+}
+
 // Главная функция
 func main() {
 	// Создание необходимых директорий
@@ -450,7 +616,13 @@ func main() {
 	http.HandleFunc("/notes/", noteHandler)
 	http.HandleFunc("/articles", articlesHandler)
 	http.HandleFunc("/articles/", articleHandler)
-
+	http.HandleFunc("/projects", projectsHandler)
+	// robots.txt
+	http.HandleFunc("/robots.txt", robotsHandler)
+	// sitemap.xml
+	http.HandleFunc("/sitemap.xml", sitemapHandler)
+	// Обработчик 404 для всех остальных путей
+	http.HandleFunc("/404", notFoundHandler)
 	// Статические файлы
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static/"))))
 
